@@ -37,16 +37,19 @@ function internal.check_rocks_toml(buffer)
         end
 
         vim.api.nvim_buf_call(buffer, function()
-            local range_start = vim.fn.byte2line(diagnostic_range.start)
-            local range_end = vim.fn.byte2line(diagnostic_range["end"])
+            local range_start = vim.fn.byte2line(diagnostic_range.start + 1)
+            local range_end = vim.fn.byte2line(diagnostic_range["end"] + 1)
 
-            -- TODO(vhyrro): Calculate remaining bytes to calculate column offsets.
+            local col_start = diagnostic_range.start - vim.fn.line2byte(range_start)
+            local col_end = diagnostic_range["end"] - vim.fn.line2byte(range_end)
+
             table.insert(diagnostics, {
                 message = diagnostic.message,
                 severity = diagnostic.severity,
-                col = 0,
-                lnum = range_start,
-                end_lnum = range_end,
+                col = col_start + 1,
+                end_col = col_end + 1,
+                lnum = range_start - 1,
+                end_lnum = range_end - 1,
             })
 
             vim.diagnostic.set(diagnostics_namespace, buffer, diagnostics, {})

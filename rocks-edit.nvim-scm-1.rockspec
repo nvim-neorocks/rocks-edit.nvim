@@ -8,7 +8,8 @@ version = _MODREV .. _SPECREV
 
 dependencies = {
   'lua >= 5.1',
-  'toml-edit >= 4.0',
+  'nvim-nio ~> 1',
+  'rocks.nvim >= 2.32.0',
 }
 
 test_dependencies = {
@@ -21,9 +22,7 @@ source = {
 
 build = {
   type = 'builtin',
-  -- TODO: Add runtime diretories here
-  -- copy_directories = {
-      -- 'doc',
-      -- "plugin",
-  -- },
+  copy_directories = {
+      "ftplugin",
+  },
 }

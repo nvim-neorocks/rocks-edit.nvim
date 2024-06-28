@@ -10,9 +10,9 @@ require("rocks-edit.api").register(function(toml, diagnostic)
 
             if target_version and target_version ~= current_version then
                 diagnostic({
-                    message = string.format("still on version `%s`. Run `:Rocks sync` to install version `%s`", current_version, target_version),
+                    message = string.format("installed version: `%s`. Run `:Rocks sync` to get version `%s`", current_version, target_version),
                     path = { "plugins", name },
-                    selector = "key",
+                    selector = "value",
                     severity = vim.diagnostic.severity.WARN,
                 })
             end

@@ -2,7 +2,7 @@
 ** MVP
    Provide a set of utils that allow the user to:
    - (x) View rocks that have available updates through diagnostics (and their new versions)
-   - Find redundant configuration and create warnings (e.g. `opt = true` + `ft = "norg"`)
+   - ( ) Find redundant configuration and create warnings (e.g. `opt = true` + `ft = "norg"`)
 ** Other TODOs
    - ( ) Hook up to fidget.nvim: `[rocks-edit]: Checking for updates...`
    - ( ) Throttling mechanism for several writes

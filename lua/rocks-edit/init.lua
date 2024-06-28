@@ -2,18 +2,7 @@ local internal = require("rocks-edit.internal")
 
 local rocks_edit = {}
 
---- Displays diagnostics for a given buffer.
----@param buffer number The buffer ID.
-function rocks_edit.display_diagnostics(buffer)
-    -- TODO(vhyrro): Make configurable
-    local sources = { "unsynced", "updates" }
-
-    for _, source in ipairs(sources) do
-        require("rocks-edit.sources." .. source)
-    end
-
-    internal.check_rocks_toml(buffer)
-
+local function attach_callbacks(buffer)
     local group = vim.api.nvim_create_augroup("rocks-edit.nvim", { clear = true })
     local modified
 
@@ -38,6 +27,20 @@ function rocks_edit.display_diagnostics(buffer)
             internal.check_rocks_toml(buffer)
         end,
     })
+end
+
+--- Displays diagnostics for a given buffer.
+---@param buffer number The buffer ID.
+function rocks_edit.display_diagnostics(buffer)
+    -- TODO(vhyrro): Make configurable
+    local sources = { "unsynced", "updates" }
+
+    for _, source in ipairs(sources) do
+        require("rocks-edit.sources." .. source)
+    end
+
+    attach_callbacks(buffer)
+    internal.check_rocks_toml(buffer)
 end
 
 return rocks_edit

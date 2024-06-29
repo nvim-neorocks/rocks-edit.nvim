@@ -22,6 +22,8 @@ end
 
 ---@param buffer number The buffer ID.
 function internal.check_rocks_toml(buffer)
+  vim.diagnostic.reset(diagnostics_namespace, buffer)
+
   local toml = internal.get_toml()
 
   local spanned_toml = require('toml_edit').parse_spanned(internal.rocks_toml_content())

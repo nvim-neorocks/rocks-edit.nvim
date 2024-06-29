@@ -1,4 +1,4 @@
-local internal = require('rocks-edit.internal')
+local internal = require("rocks-edit.internal")
 
 local api = {}
 
@@ -6,7 +6,7 @@ local api = {}
 --- A source generates diagnostics to be displayed in the `rocks.toml` file.
 ---@param callback RocksEditSource
 function api.register(callback)
-  internal.register(callback)
+    internal.register(callback)
 end
 
 return api

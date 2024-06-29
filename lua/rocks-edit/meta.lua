@@ -18,4 +18,4 @@
 ---@alias RocksEditSource fun(toml: RocksToml, set: fun(RocksEditDiagnostic))
 
 ---@class RocksEditConfig
----@field sources table<string, boolean> A list of module paths to invoke that act as sources for `rocks-edit.nvim`.
+---@field builtin_sources table<string, boolean> A list of module paths to invoke that act as sources for `rocks-edit.nvim`.

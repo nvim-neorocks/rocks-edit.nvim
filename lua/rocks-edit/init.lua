@@ -46,7 +46,7 @@ function rocks_edit.display_diagnostics(buffer)
 
     internal.clear_sources()
 
-    local sources = config.get().sources
+    local sources = config.get().builtin_sources
 
     for source, enabled in pairs(sources) do
         if enabled then

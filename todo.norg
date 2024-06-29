@@ -5,4 +5,3 @@
    - ( ) Find redundant configuration and create warnings (e.g. `opt = true` + `ft = "norg"`)
 ** Other TODOs
    - ( ) Hook up to fidget.nvim: `[rocks-edit]: Checking for updates...`
-   - ( ) `:checkhealth`

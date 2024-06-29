@@ -4,7 +4,7 @@ local config = {}
 
 ---@type RocksEditConfig
 local default_config = {
-    sources = { unsynced = true, updates = true },
+    builtin_sources = { unsynced = true, updates = true },
 }
 
 local current_config = vim.deepcopy(default_config)
@@ -15,7 +15,7 @@ end
 
 function config.validate_sources(sources)
     for name, value in pairs(sources) do
-        if type(name) ~= "string" or type(value) ~= "boolean" or not default_config.sources[name] then
+        if type(name) ~= "string" or type(value) ~= "boolean" or not default_config.builtin_sources[name] then
             return false
         end
     end
@@ -27,14 +27,12 @@ end
 ---@param conf RocksEditConfig
 function config.validate(conf)
     vim.validate({
-        sources = { conf.sources, config.validate_sources, "invalid list of sources provided. Run `:checkhealth rocks-edit.nvim` for more information." },
+        sources = { conf.builtin_sources, config.validate_sources, "invalid list of sources provided. Run `:checkhealth rocks-edit.nvim` for more information." },
     })
 end
 
 function config.configure()
     local toml = internal.get_toml()
-
-    -- Do various checks to see if this table exists
 
     if toml.edit then
         config.configure_from_table(toml.edit)
@@ -45,6 +43,10 @@ function config.configure()
     end
 
     config.validate(current_config)
+end
+
+function config.default()
+    return default_config
 end
 
 function config.get()

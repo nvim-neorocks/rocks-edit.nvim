@@ -20,6 +20,10 @@ function internal.register(callback)
   table.insert(callbacks, callback)
 end
 
+function internal.clear_sources()
+  callbacks = {}
+end
+
 ---@param buffer number The buffer ID.
 function internal.check_rocks_toml(buffer)
   vim.diagnostic.reset(diagnostics_namespace, buffer)

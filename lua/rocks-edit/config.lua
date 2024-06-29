@@ -7,8 +7,10 @@ local default_config = {
   sources = { unsynced = true, updates = true },
 }
 
+local current_config = vim.deepcopy(default_config)
+
 function config.configure_from_table(tbl)
-  default_config = vim.tbl_deep_extend('force', default_config, tbl)
+  current_config = vim.tbl_deep_extend('force', default_config, tbl)
 end
 
 function config.configure()
@@ -26,7 +28,7 @@ function config.configure()
 end
 
 function config.get()
-  return default_config
+  return current_config
 end
 
 return config

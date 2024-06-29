@@ -25,7 +25,7 @@ local function attach_callbacks(buffer)
         return
       end
 
-      internal.check_rocks_toml(buffer)
+      rocks_edit.display_diagnostics(buffer)
     end,
   })
 end
@@ -40,11 +40,19 @@ end
 --- Displays diagnostics for a given buffer.
 ---@param buffer number The buffer ID.
 function rocks_edit.display_diagnostics(buffer)
+  -- Implictly read dynamic configuration (allows for hot-reloading of settings
+  -- creating in rocks.toml)
+  rocks_edit.configure()
+
+  internal.clear_sources()
+
   local sources = config.get().sources
 
   for source, enabled in pairs(sources) do
     if enabled then
-      require('rocks-edit.sources.' .. source)
+      local package_path = 'rocks-edit.sources.' .. source
+      package.loaded[package_path] = nil
+      require(package_path)
     end
   end
 

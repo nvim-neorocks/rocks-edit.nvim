@@ -1,5 +1,7 @@
 ---@meta
 
+---@module "rocks.api"
+
 ---@alias RocksEditDiagnosticType vim.diagnostic.Severity
 
 ---@alias RocksEditDiagnosticSelector
@@ -14,3 +16,6 @@
 ---@field message string The message to display in the diagnostic.
 
 ---@alias RocksEditSource fun(toml: RocksToml, set: fun(RocksEditDiagnostic))
+
+---@class RocksEditConfig
+---@field sources table<string, boolean> A list of module paths to invoke that act as sources for `rocks-edit.nvim`.

@@ -6,3 +6,5 @@
 ** Other TODOs
    - ( ) Hook up to fidget.nvim: `[rocks-edit]: Checking for updates...`
    - ( ) Throttling mechanism for several writes
+   - ( ) Clear all diagnostics on every state change (it acn leave behind residue diagnostics
+         that no longer apply). The diagnostics are recalculated anyway.

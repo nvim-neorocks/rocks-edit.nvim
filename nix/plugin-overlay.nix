@@ -1,23 +1,30 @@
 {
   name,
   self,
+  inputs,
 }: final: prev: let
-  packageOverrides = luaself: luaprev: {
-    # TODO: Rename
-    plugin-template-nvim = luaself.callPackage ({buildLuarocksPackage}:
+  rocks-nvim = inputs.rocks-nvim-flake.packages.${final.system}.rocks-nvim;
+  luaPackageOverrides = luaself: luaprev: {
+    rocks-edit-nvim = luaself.callPackage ({
+      buildLuarocksPackage,
+      nvim-nio,
+    }:
       buildLuarocksPackage {
         pname = name;
         version = "scm-1";
-        # TODO: Set rockspec name
-        knownRockspec = "${self}/plugin-template.nvim-scm-1.rockspec";
+        propagatedBuildInputs = [
+          rocks-nvim
+          nvim-nio
+        ];
+        knownRockspec = "${self}/${name}-scm-1.rockspec";
         src = self;
       }) {};
   };
 
-  lua5_1 = prev.lua5_1.override {
-    inherit packageOverrides;
+  luajit = prev.luajit.override {
+    packageOverrides = luaPackageOverrides;
   };
-  lua51Packages = final.lua5_1.pkgs;
+  luajitPackages = prev.luajitPackages // final.luajit.pkgs;
 
   # TODO: Rename
   nvim-plugin = final.neovimUtils.buildNeovimPlugin {
@@ -27,8 +34,8 @@
   };
 in {
   inherit
-    lua5_1
-    lua51Packages
+    luajit
+    luajitPackages
     ;
 
   vimPlugins =

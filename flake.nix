@@ -13,6 +13,11 @@
     neorocks = {
       url = "github:nvim-neorocks/neorocks";
     };
+
+    rocks-nvim-flake = {
+      url = "github:nvim-neorocks/rocks.nvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs @ {
@@ -23,10 +28,10 @@
     neorocks,
     ...
   }: let
-    name = "plugin-template.nvim"; # TODO: Choose a name
+    name = "rocks-edit.nvim";
 
     plugin-overlay = import ./nix/plugin-overlay.nix {
-      inherit name self;
+      inherit name self inputs;
     };
   in
     flake-parts.lib.mkFlake {inherit inputs;} {
@@ -143,8 +148,8 @@
         };
 
         packages = rec {
-          default = nvim-plugin;
-          inherit (pkgs.vimPlugins) nvim-plugin;
+          default = rocks-edit-nvim;
+          inherit (pkgs.luajitPackages) rocks-edit-nvim;
           inherit (pkgs) docgen;
         };
 

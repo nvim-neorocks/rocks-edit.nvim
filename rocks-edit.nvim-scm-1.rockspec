@@ -9,7 +9,7 @@ version = _MODREV .. _SPECREV
 dependencies = {
   'lua >= 5.1',
   'nvim-nio ~> 1',
-  'rocks.nvim >= 2.32.0',
+  'rocks.nvim >= 2.35.0',
 }
 
 test_dependencies = {

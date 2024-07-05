@@ -14,6 +14,7 @@ dependencies = {
 
 test_dependencies = {
   'lua >= 5.1',
+  'nlua',
 }
 
 source = {

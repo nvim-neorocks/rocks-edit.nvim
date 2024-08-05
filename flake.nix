@@ -24,7 +24,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    cats-doc.url = "github:mrcjkb/cats-doc";
+    vimcats.url = "github:mrcjkb/vimcats";
 
     rocks-nvim-flake = {
       url = "github:nvim-neorocks/rocks.nvim";

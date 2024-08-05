@@ -1,10 +1,15 @@
-local internal = require("rocks-edit.internal")
-
 local config = {}
 
 ---@type rocks-edit.Config
 local default_config = {
-    builtin_sources = { unsynced = true, updates = true },
+    builtin_sources = {
+        unsynced = true,
+        updates = true,
+    },
+    events = {
+        "BufWritePost",
+        "TextChanged",
+    },
 }
 
 local current_config = vim.deepcopy(default_config)
@@ -36,7 +41,7 @@ function config.validate(conf)
 end
 
 function config.configure()
-    local toml = internal.get_toml()
+    local toml = require("rocks.api").get_rocks_toml()
 
     if toml.edit then
         config.configure_from_table(toml.edit)

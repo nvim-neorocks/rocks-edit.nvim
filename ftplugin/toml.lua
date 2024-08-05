@@ -1,9 +1,17 @@
-local ok, rocks = pcall(require, "rocks.api")
+local rocks_edit = require("rocks-edit")
 
-assert(ok, "rocks.nvim is required for `rocks-edit.nvim` to function, please install it!")
-
-if vim.uv.fs_realpath(vim.fn.expand("%")) == vim.uv.fs_realpath(rocks.get_rocks_toml_path()) then
-    local rocks_edit = require("rocks-edit")
-
-    rocks_edit.display_diagnostics(vim.api.nvim_get_current_buf())
+if not vim.g.rocks_edit_nvim_loaded then
+    local group = vim.api.nvim_create_augroup("rocks-edit.nvim", { clear = true })
+    rocks_edit.configure()
+    -- one-time initialisation logic
+    vim.api.nvim_create_autocmd("User", {
+        pattern = "RocksCachePopulated",
+        group = group,
+        callback = function()
+            rocks_edit.display_diagnostics()
+        end,
+    })
+    vim.g.rocks_edit_nvim_loaded = true
 end
+
+rocks_edit.display_diagnostics()

@@ -24,7 +24,7 @@ end
 ---@field selector rocks-edit.diagnostic.Selector What to select from the given path. When `"name"`, the diagnostic will affect the name. When "value", the value is highlighted. A number can be given to select an element from an array via an index.
 ---@field message string The message to display in the diagnostic.
 
----@alias rocks-edit.Source fun(toml: RocksToml, set: fun(RocksEditDiagnostic))
+---@alias rocks-edit.Source fun(toml: RocksToml, set: fun(diagnostic: rocks-edit.Diagnostic))
 
 ---@class rocks-edit.Config
 ---@field builtin_sources table<string, boolean> A list of module paths to invoke that act as sources for `rocks-edit.nvim`.

@@ -36,7 +36,7 @@ rocks-edit.Diagnostic                                    *rocks-edit.Diagnostic*
 rocks-edit.Source                                            *rocks-edit.Source*
 
     Type: ~
-        fun(toml:RocksToml,set:fun(RocksEditDiagnostic:any))
+        fun(toml:RocksToml,set:fun(diagnostic:rocks-edit.Diagnostic))
 
 
 rocks-edit.Config                                            *rocks-edit.Config*

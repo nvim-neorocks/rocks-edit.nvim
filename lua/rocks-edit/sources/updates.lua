@@ -23,7 +23,7 @@ require("rocks-edit.api").register(function(toml, diagnostic)
                 diagnostic({
                     message = message,
                     path = { "plugins", name },
-                    selector = "key",
+                    selector = "name",
                     severity = severity,
                 })
             end

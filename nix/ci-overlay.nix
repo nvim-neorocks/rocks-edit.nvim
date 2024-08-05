@@ -50,7 +50,7 @@
     ];
     text = ''
       mkdir -p doc
-      lemmy-help lua/rocks-edit/api.lua > doc/rocks-edit.txt
+      lemmy-help lua/rocks-edit/{_meta,api}.lua > doc/rocks-edit.txt
     '';
   };
 in {

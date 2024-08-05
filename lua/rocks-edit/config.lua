@@ -4,7 +4,14 @@ local config = {}
 
 ---@type rocks-edit.Config
 local default_config = {
-    builtin_sources = { unsynced = true, updates = true },
+    builtin_sources = {
+        unsynced = true,
+        updates = true,
+    },
+    events = {
+        "BufWritePost",
+        "TextChanged",
+    },
 }
 
 local current_config = vim.deepcopy(default_config)

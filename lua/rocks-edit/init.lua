@@ -17,7 +17,7 @@ local function attach_callbacks(buffer)
         end,
     })
 
-    vim.api.nvim_create_autocmd("BufWritePost", {
+    vim.api.nvim_create_autocmd(config.get().events, {
         buffer = buffer,
         group = group,
         callback = function()

@@ -6,12 +6,17 @@
 
     flake-parts.url = "github:hercules-ci/flake-parts";
 
-    pre-commit-hooks = {
-      url = "github:cachix/pre-commit-hooks.nix";
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
     };
 
     neorocks = {
       url = "github:nvim-neorocks/neorocks";
+    };
+
+    gen-luarc = {
+      url = "github:mrcjkb/nix-gen-luarc-json";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     rocks-nvim-flake = {
@@ -24,8 +29,9 @@
     self,
     nixpkgs,
     flake-parts,
-    pre-commit-hooks,
+    git-hooks,
     neorocks,
+    gen-luarc,
     ...
   }: let
     name = "rocks-edit.nvim";
@@ -57,73 +63,38 @@
           overlays = [
             ci-overlay
             neorocks.overlays.default
+            gen-luarc.overlays.default
             plugin-overlay
           ];
         };
 
-        mkTypeCheck = {
-          nvim-api ? [],
-          disabled-diagnostics ? [],
-        }:
-          pre-commit-hooks.lib.${system}.run {
+        mk-luarc = nvim:
+          pkgs.mk-luarc {
+            inherit nvim;
+            plugins = with pkgs.luajitPackages; [
+              rocks-nvim
+              nvim-nio
+            ];
+          };
+
+        luarc-nightly = mk-luarc pkgs.neovim-nightly;
+        luarc-stable = mk-luarc pkgs.neovim-unwrapped;
+
+        mk-type-check = luarc:
+          git-hooks.lib.${system}.run {
             src = self;
             hooks = {
-              lua-ls.enable = true;
-            };
-            settings = {
               lua-ls = {
-                config = {
-                  runtime.version = "LuaJIT";
-                  Lua = {
-                    workspace = {
-                      library =
-                        nvim-api
-                        ++ [
-                          # TODO: Add lua API dependencies here, e.g.
-                          # "${pkgs.lua51Packages.fzy}/share/lua/5.1"
-                          # "${pkgs.vimPlugins.telescope-nvim}/lua"
-                        ]
-                        ++ [
-                          "\${3rd}/busted/library"
-                          "\${3rd}/luassert/library"
-                        ];
-                      ignoreDir = [
-                        ".git"
-                        ".github"
-                        ".direnv"
-                        "result"
-                        "nix"
-                        "doc"
-                      ];
-                    };
-                    diagnostics = {
-                      libraryFiles = "Disable";
-                      disable = disabled-diagnostics;
-                    };
-                  };
-                };
+                enable = true;
+                settings.configuration = luarc;
               };
             };
           };
 
-        type-check-stable = mkTypeCheck {
-          nvim-api = [
-            "${pkgs.neovim}/share/nvim/runtime/lua"
-            "${pkgs.neodev-plugin}/types/stable"
-          ];
-          disabled-diagnostics = [
-            # For compatibility with nightly, some diagnostics may have to be disabled here.
-          ];
-        };
+        type-check-nightly = mk-type-check luarc-nightly;
+        type-check-stable = mk-type-check luarc-stable;
 
-        type-check-nightly = mkTypeCheck {
-          nvim-api = [
-            "${pkgs.neovim-nightly}/share/nvim/runtime/lua"
-            "${pkgs.neodev-plugin}/types/nightly"
-          ];
-        };
-
-        pre-commit-check = pre-commit-hooks.lib.${system}.run {
+        pre-commit-check = git-hooks.lib.${system}.run {
           src = self;
           hooks = {
             alejandra.enable = true;
@@ -135,11 +106,19 @@
         };
 
         devShell = pkgs.nvim-nightly-tests.overrideAttrs (oa: {
-          name = "devShell"; # TODO: Choose a name
-          inherit (pre-commit-check) shellHook;
+          name = "rocks-edit.nvim devShell";
+          shellHook = ''
+            ${pre-commit-check.shellHook}
+            ln -fs ${pkgs.luarc-to-json luarc-nightly} .luarc.json
+          '';
           buildInputs =
             self.checks.${system}.pre-commit-check.enabledPackages
-            ++ oa.buildInputs;
+            ++ (with pkgs; [
+              lua-language-server
+            ])
+            ++ oa.buildInputs
+            ++ oa.propagatedBuildInputs;
+          doCheck = false;
         });
       in {
         devShells = {

@@ -1,6 +1,6 @@
 local internal = {}
 
----@type RocksEditSource[]
+---@type rocks-edit.Source[]
 local callbacks = {}
 
 local diagnostics_namespace = vim.api.nvim_create_namespace("rocks-edit/diagnostics")
@@ -15,7 +15,7 @@ function internal.get_toml()
     return require("rocks.api").get_rocks_toml()
 end
 
----@param callback RocksEditSource
+---@param callback rocks-edit.Source
 function internal.register(callback)
     table.insert(callbacks, callback)
 end
@@ -31,10 +31,10 @@ function internal.check_rocks_toml(buffer)
     local toml = internal.get_toml()
 
     local spanned_toml = require("toml_edit").parse_spanned(internal.rocks_toml_content())
-    ---@type RocksEditDiagnostic[]
+    ---@type rocks-edit.Diagnostic[]
     local diagnostics = {}
 
-    ---@param diagnostic RocksEditDiagnostic
+    ---@param diagnostic rocks-edit.Diagnostic
     local function set(diagnostic)
         local diagnostic_range = spanned_toml.span_of(diagnostic.path, diagnostic.selector)
 

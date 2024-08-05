@@ -19,6 +19,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    cats-doc.url = "github:mrcjkb/cats-doc";
+
     rocks-nvim-flake = {
       url = "github:nvim-neorocks/rocks.nvim";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -54,7 +56,10 @@
         ...
       }: let
         ci-overlay = import ./nix/ci-overlay.nix {
-          inherit self;
+          inherit
+            self
+            inputs
+            ;
           plugin-name = name;
         };
 
@@ -102,6 +107,13 @@
             luacheck.enable = true;
             editorconfig-checker.enable = true;
             markdownlint.enable = true;
+            docgen = {
+              enable = true;
+              name = "docgen";
+              entry = "${pkgs.docgen}/bin/docgen";
+              files = "\\.(lua)$";
+              pass_filenames = false;
+            };
           };
         };
 
@@ -115,6 +127,7 @@
             self.checks.${system}.pre-commit-check.enabledPackages
             ++ (with pkgs; [
               lua-language-server
+              docgen
             ])
             ++ oa.buildInputs
             ++ oa.propagatedBuildInputs;

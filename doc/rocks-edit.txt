@@ -1,0 +1,48 @@
+==============================================================================
+rocks-edit.nvim Lua API                                         *rocks-edit.api*
+
+api.register({callback})                                          *api.register*
+     Registers a source for the `rocks-edit` plugin.
+     A source generates diagnostics to be displayed in the `rocks.toml` file.
+
+    Parameters: ~
+        {callback}  (rocks-edit.Source)
+
+
+rocks-edit.diagnostic.Type                          *rocks-edit.diagnostic.Type*
+
+    Type: ~
+        vim.diagnostic.Severity
+
+
+rocks-edit.diagnostic.Selector                  *rocks-edit.diagnostic.Selector*
+
+    Variants: ~
+
+
+
+rocks-edit.Diagnostic                                    *rocks-edit.Diagnostic*
+    |"name"
+    |"value"
+    |number
+
+    Fields: ~
+        {severity}  (rocks-edit.diagnostic.Type)
+        {path}      (string[])                        A path to the object where the error is occuring. For example: `{ "plugins", "neorg" }`.
+        {selector}  (rocks-edit.diagnostic.Selector)  What to select from the given path. When `"name"`, the diagnostic will affect the name. When "value", the value is highlighted. A number can be given to select an element from an array via an index.
+        {message}   (string)                          The message to display in the diagnostic.
+
+
+rocks-edit.Source                                            *rocks-edit.Source*
+
+    Type: ~
+        fun(toml:RocksToml,set:fun(RocksEditDiagnostic:any))
+
+
+rocks-edit.Config                                            *rocks-edit.Config*
+
+    Fields: ~
+        {builtin_sources}  (table<string,boolean>)  A list of module paths to invoke that act as sources for `rocks-edit.nvim`.
+
+
+vim:tw=78:ts=8:noet:ft=help:norl:

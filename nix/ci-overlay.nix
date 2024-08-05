@@ -2,9 +2,8 @@
 {
   self,
   plugin-name,
-}: final: prev:
-with final.lib;
-with final.stdenv; let
+  inputs,
+}: final: prev: let
   nvim-nightly = final.neovim-nightly;
 
   mkNeorocksTest = {
@@ -43,13 +42,12 @@ with final.stdenv; let
 
   docgen = final.writeShellApplication {
     name = "docgen";
-    runtimeInputs = with final; [
-      lemmy-help
+    runtimeInputs = [
+      inputs.cats-doc.packages.${final.system}.default
     ];
     text = ''
       mkdir -p doc
-      # TODO: Update this!
-      lemmy-help lua/rocks/{init,commands,config/init}.lua > doc/nvim-plugin.txt
+      lemmy-help lua/rocks-edit/api.lua > doc/rocks-edit.txt
     '';
   };
 in {

@@ -2,7 +2,7 @@ local internal = require("rocks-edit.internal")
 
 local config = {}
 
----@type RocksEditConfig
+---@type rocks-edit.Config
 local default_config = {
     builtin_sources = { unsynced = true, updates = true },
 }
@@ -24,10 +24,14 @@ function config.validate_sources(sources)
 end
 
 --- Quickly verifies a configuration. Full checks are performed in the healthcheck.
----@param conf RocksEditConfig
+---@param conf rocks-edit.Config
 function config.validate(conf)
     vim.validate({
-        sources = { conf.builtin_sources, config.validate_sources, "invalid list of sources provided. Run `:checkhealth rocks-edit.nvim` for more information." },
+        sources = {
+            conf.builtin_sources,
+            config.validate_sources,
+            "invalid list of sources provided. Run `:checkhealth rocks-edit.nvim` for more information.",
+        },
     })
 end
 

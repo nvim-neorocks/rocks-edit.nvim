@@ -1,5 +1,10 @@
 {
-  description = "Neovim Nix flake CI template for GitHub Actions"; # TODO: Set description
+  description = "rocks-dev.nvim flake";
+
+  nixConfig = {
+    extra-substituters = "https://neorocks.cachix.org";
+    extra-trusted-public-keys = "neorocks.cachix.org-1:WqMESxmVTOJX7qoBC54TwrMMoVI1xAM+7yFin8NRfwk=";
+  };
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
@@ -10,9 +15,9 @@
       url = "github:cachix/git-hooks.nix";
     };
 
-    neorocks = {
-      url = "github:nvim-neorocks/neorocks";
-    };
+    neorocks.url = "github:nvim-neorocks/neorocks";
+
+    rocks-nvim.url = "github:nvim-neorocks/rocks.nvim";
 
     gen-luarc = {
       url = "github:mrcjkb/nix-gen-luarc-json";
@@ -33,6 +38,7 @@
     flake-parts,
     git-hooks,
     neorocks,
+    rocks-nvim,
     gen-luarc,
     ...
   }: let
@@ -69,6 +75,7 @@
             ci-overlay
             neorocks.overlays.default
             gen-luarc.overlays.default
+            rocks-nvim.overlays.default
             plugin-overlay
           ];
         };

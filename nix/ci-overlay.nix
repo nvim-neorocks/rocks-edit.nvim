@@ -27,8 +27,11 @@
       src = self;
       neovim = nvim-wrapped;
 
-      # luaPackages = ps: with ps; [];
-      # extraPackages = [];
+      luaPackages = ps:
+        with ps; [
+          inputs.rocks-nvim-flake.packages.${final.system}.rocks-nvim
+          nvim-nio
+        ];
 
       preCheck = ''
         export HOME=$(realpath .)

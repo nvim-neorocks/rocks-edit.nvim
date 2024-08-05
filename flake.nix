@@ -84,7 +84,7 @@
           pkgs.mk-luarc {
             inherit nvim;
             plugins = with pkgs.luajitPackages; [
-              rocks-nvim
+              inputs.rocks-nvim-flake.packages.${system}.rocks-nvim
               nvim-nio
             ];
           };

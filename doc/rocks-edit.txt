@@ -22,7 +22,7 @@ rocks-edit.diagnostic.Selector                  *rocks-edit.diagnostic.Selector*
 
 
 rocks-edit.Diagnostic                                    *rocks-edit.Diagnostic*
-    |"name"
+    |"key"
     |"value"
     |number
 

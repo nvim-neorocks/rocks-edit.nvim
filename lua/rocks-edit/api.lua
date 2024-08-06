@@ -14,7 +14,7 @@ end
 ---@alias rocks-edit.diagnostic.Type vim.diagnostic.Severity
 
 ---@alias rocks-edit.diagnostic.Selector
----|"name"
+---|"key"
 ---|"value"
 ---|number
 

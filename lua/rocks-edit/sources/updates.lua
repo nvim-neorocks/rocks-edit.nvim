@@ -1,8 +1,16 @@
 local nio = require("nio")
 
+local cache_populated = false
+
 require("rocks-edit.api").register(function(toml, diagnostic)
     nio.run(function()
-        local updates = require("rocks.state").outdated_rocks()
+        local updates = require("rocks.api").try_get_cached_outdated_rocks()
+        --- HACK: internal API! Rocks.nvim should provide an option to fall back to a
+        --- luarocks query if the cache is not populated.
+        if not cache_populated and #updates == 0 then
+            updates = require("rocks.state").outdated_rocks()
+            cache_populated = true
+        end
 
         for name, data in pairs(updates) do
             if toml.plugins[name] then

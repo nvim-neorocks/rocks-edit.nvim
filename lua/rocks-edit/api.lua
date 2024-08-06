@@ -21,7 +21,7 @@ end
 ---@class (exact) rocks-edit.Diagnostic
 ---@field severity rocks-edit.diagnostic.Type
 ---@field path string[] A path to the object where the error is occuring. For example: `{ "plugins", "neorg" }`.
----@field selector rocks-edit.diagnostic.Selector What to select from the given path. When `"name"`, the diagnostic will affect the name. When "value", the value is highlighted. A number can be given to select an element from an array via an index.
+---@field selector rocks-edit.diagnostic.Selector What to select from the given path. When `"key"`, the diagnostic will affect the name. When "value", the value is highlighted. A number can be given to select an element from an array via an index.
 ---@field message string The message to display in the diagnostic.
 
 ---@alias rocks-edit.Source fun(toml: RocksToml, set: fun(diagnostic: rocks-edit.Diagnostic))

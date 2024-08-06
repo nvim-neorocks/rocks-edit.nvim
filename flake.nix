@@ -149,7 +149,11 @@
         packages = rec {
           default = rocks-edit-nvim;
           inherit (pkgs.luajitPackages) rocks-edit-nvim;
-          inherit (pkgs) docgen;
+          inherit
+            (pkgs)
+            docgen
+            neovim-with-rocks
+            ;
         };
 
         checks = {

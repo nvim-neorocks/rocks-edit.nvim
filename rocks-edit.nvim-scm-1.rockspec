@@ -10,6 +10,7 @@ dependencies = {
     "lua >= 5.1",
     "nvim-nio ~> 1",
     "rocks.nvim >= 2.35.0",
+    "toml-edit >= 0.4.1",
 }
 
 test_dependencies = {

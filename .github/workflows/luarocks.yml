@@ -31,3 +31,4 @@ jobs:
           dependencies: |
             rocks.nvim
             nvim-nio
+            toml-edit >= 0.4.1

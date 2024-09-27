@@ -1,4 +1,44 @@
 ==============================================================================
+See useful diagnostics right from your rocks.toml              *rocks-edit.nvim*
+
+==============================================================================
+Table of Contents                                          *rocks-edit-contents*
+
+See useful diagnostics right from your rocks.toml ············ |rocks-edit.nvim|
+rocks-edit.nvim configuration ······························ |rocks-edit.config|
+rocks-edit.nvim Lua API ······································· |rocks-edit.api|
+
+==============================================================================
+rocks-edit.nvim configuration                                *rocks-edit.config*
+
+You can configure rocks-edit.nvim using a `[edit]` table in your rocks.toml.
+
+Example:
+>toml
+     [edit.builtin_sources]
+     unsynced = true
+     updated = true
+
+     [edit]
+     events = [ "TextChanged", "BufWritePost" ]
+<
+
+
+rocks-edit.Config                                            *rocks-edit.Config*
+
+    Fields: ~
+        {builtin_sources}  (table<builtin_source,boolean>)
+                                                            A list of module paths to invoke that act as sources for `rocks-edit.nvim`.
+
+
+builtin_source                                                  *builtin_source*
+
+
+    Variants: ~
+
+
+
+==============================================================================
 rocks-edit.nvim Lua API                                         *rocks-edit.api*
 
 api.register({callback})                                          *api.register*
@@ -37,12 +77,6 @@ rocks-edit.Source                                            *rocks-edit.Source*
 
     Type: ~
         fun(toml:RocksToml,set:fun(diagnostic:rocks-edit.Diagnostic))
-
-
-rocks-edit.Config                                            *rocks-edit.Config*
-
-    Fields: ~
-        {builtin_sources}  (table<string,boolean>)  A list of module paths to invoke that act as sources for `rocks-edit.nvim`.
 
 
 vim:tw=78:ts=8:noet:ft=help:norl:

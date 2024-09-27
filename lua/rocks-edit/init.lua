@@ -1,30 +1,23 @@
 local internal = require("rocks-edit.internal")
 local config = require("rocks-edit.config")
+local rocks = require("rocks.api")
 
 local rocks_edit = {}
 
+---@param buffer number The buffer ID.
+local function is_rocks_toml(buffer)
+    local buf_path = vim.uv.fs_realpath(vim.api.nvim_buf_get_name(buffer))
+    local rocks_toml_path = vim.uv.fs_realpath(rocks.get_rocks_toml_path())
+    return buf_path == rocks_toml_path
+end
+
 local function attach_callbacks(buffer)
-    local group = vim.api.nvim_create_augroup("rocks-edit.nvim", { clear = true })
-    local modified
+    local group = vim.api.nvim_create_augroup("rocks-edit.nvim-callbacks", { clear = true })
 
-    vim.api.nvim_create_autocmd("BufWritePre", {
+    vim.api.nvim_create_autocmd(config.get().events, {
         buffer = buffer,
         group = group,
         callback = function()
-            -- The `modified` variable cannot be checked after
-            -- the buffer has been written, so we check here instead.
-            modified = vim.bo[buffer].modified
-        end,
-    })
-
-    vim.api.nvim_create_autocmd("BufWritePost", {
-        buffer = buffer,
-        group = group,
-        callback = function()
-            if not modified then
-                return
-            end
-
             rocks_edit.display_diagnostics(buffer)
         end,
     })
@@ -38,11 +31,15 @@ function rocks_edit.configure()
 end
 
 --- Displays diagnostics for a given buffer.
----@param buffer number The buffer ID.
+---@param buffer? number The buffer ID.
 function rocks_edit.display_diagnostics(buffer)
+    buffer = buffer or vim.api.nvim_get_current_buf()
+    if not is_rocks_toml(buffer) then
+        return
+    end
     -- Implictly read dynamic configuration (allows for hot-reloading of settings
     -- creating in rocks.toml)
-    rocks_edit.configure()
+    local ok = pcall(rocks_edit.configure)
 
     internal.clear_sources()
 
@@ -56,7 +53,9 @@ function rocks_edit.display_diagnostics(buffer)
         end
     end
 
-    attach_callbacks(buffer)
+    if ok then
+        attach_callbacks(buffer)
+    end
     internal.check_rocks_toml(buffer)
 end
 
